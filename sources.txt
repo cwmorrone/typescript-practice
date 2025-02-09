@@ -1,0 +1,6 @@
+Sources
+
+
+TS website       https://www.typescriptlang.org
+JS textbook      https://eloquentjavascript.net/
+
