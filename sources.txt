@@ -2,5 +2,9 @@ Sources
 
 
 TS website       https://www.typescriptlang.org
+TS "roadmap"     https://roadmap.sh/typescript
 JS textbook      https://eloquentjavascript.net/
+Js vs Ts         https://hygraph.com/blog/typescript-vs-javascript
+Big Ts book      https://books.google.com/books?id=YD5zEAAAQBAJ&lpg=PP1&ots=FG-fJqlLm3&dq=typescript&lr&pg=PR9#v=onepage&q=typescript&f=false
+
 
