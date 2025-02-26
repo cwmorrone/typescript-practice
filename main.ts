@@ -1,4 +1,14 @@
-import { Pet, Dog, FoodType, Food, ObstacleCourse} from './pets';
+/*  CS451 Pet Assignment
+*   Vilnis Jatnieks and Chase Morrone
+*   main.ts
+*
+*   This program simulates the Puppy Bowl, our nation's greatest sporting event!
+*
+*   This file drives the program.
+* */
+
+
+import { Dog, puppyBowl} from './pets';
 
 // Create some pets
 const chippy = new Dog("Chippy", 3, "Poodle");
@@ -6,7 +16,7 @@ const ollie = new Dog("Ollie", 5, "Labrador");
 
 
 // Create a competition
-const obstacleRace = new ObstacleCourse(2);
+const obstacleRace = new puppyBowl(2);
 obstacleRace.addParticipant(chippy);
 obstacleRace.addParticipant(ollie);
 

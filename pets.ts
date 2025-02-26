@@ -1,3 +1,53 @@
+/*  CS451 Pet Assignment
+*   Vilnis Jatnieks and Chase Morrone
+*   pets.ts
+*
+*   This program simulates the Puppy Bowl, our nation's greatest sporting event!
+*
+*   ## General overview ##
+*   pets.ts:
+*       interface Pet
+*       class Dog
+*       interface Competition
+*       class puppyBowl
+*   main.ts:
+*       create Dog and puppyBowl objects
+*       run the simulation
+*       output the winner
+*   tsconfig.json:
+*       set up proper JS version for the libraries we are using
+*
+*   ## Learning aims ##
+*   Writing this program teaches cool things in TS such as:
+*       export and import for modularization
+*       interfaces
+*       classes
+*       methods
+*       strict equality operator
+*       generics
+*       union types
+*       throw error
+*       .filter method for arrays
+*       Record to create key, value pairs
+*       Object.keys and Object.entries to get key and value arrays
+*       random number generation
+*
+*   ## Stretch goal ##
+*   The student is encouraged to expand on the code by:
+*       adding additional Pet classes like Cat
+*       adding additional Competition classes like catShow or dogRace
+*       utilizing the Dog specific Bark method in such competitions
+*       adding extra properties or methods
+*
+*   ## Our goals ##
+*   Need to add instructions for setting up and running TS
+*   Provide outlines for the stretch goals
+*   Overall, make the code easier to understand for a complete beginner
+*
+*   This file sets up Pet and Competition interfaces to allow the student to experiment by creating their own Classes.
+*
+* */
+
 export interface Pet {
     name: string;
     species: string;
@@ -5,7 +55,6 @@ export interface Pet {
     energy: number;
     happiness: number;
 
-    eat(food: Food): void;
     play(): void;
     rest(): void;
 }
@@ -26,16 +75,6 @@ export class Dog implements Pet {
         this.breed = breed;
     }
 
-    eat(food: Food): void {
-        this.energy += food.energyValue;
-        // Dogs love meat but are less enthusiastic about vegetables
-        if (food.type === "meat") {
-            this.happiness += 15;
-        } else if (food.type === "vegetable") {
-            this.happiness += 5;
-        }
-    }
-
     play(): void {
         // Dogs use more energy when playing but get very happy
         this.energy -= 20;
@@ -53,27 +92,6 @@ export class Dog implements Pet {
     }
 }
 
-export type FoodType = "meat" | "vegetable" | "treat";
-
-export interface Food {
-    name: string;
-    type: FoodType;
-    energyValue: number;
-}
-
-// Example food implementations
-export const dogTreat: Food = {
-    name: "Dog Biscuit",
-    type: "treat",
-    energyValue: 10
-};
-
-export const carrot: Food = {
-    name: "Carrot",
-    type: "vegetable",
-    energyValue: 15
-};
-
 export interface Competition<T extends Pet> {
     name: string;
     participants: T[];
@@ -84,10 +102,10 @@ export interface Competition<T extends Pet> {
     startCompetition(): T; // Returns the winner
 }
 
-export class ObstacleCourse implements Competition<Dog> {
-    name = "Obstacle Course";
+export class puppyBowl implements Competition<Dog> {
+    name = "Puppy Bowl";
     participants: Dog[] = [];
-    difficultyLevel: 1 | 2 | 3;
+    difficultyLevel: 1 | 2 | 3; // Union type restricts variable to either 1, 2, or 3
 
     constructor(difficultyLevel: 1 | 2 | 3 = 1) {
         this.difficultyLevel = difficultyLevel;
@@ -99,6 +117,7 @@ export class ObstacleCourse implements Competition<Dog> {
 
     removeParticipant(pet: Dog): void {
         this.participants = this.participants.filter(p => p.name !== pet.name);
+        // filter is a built-in array method in TS
     }
 
     startCompetition(): Dog {
@@ -106,20 +125,21 @@ export class ObstacleCourse implements Competition<Dog> {
             throw new Error("No participants in the competition!");
         }
 
-        // Calculate scores based on dog attributes and random factor
-        const scores: Record<string, number> = {};
+        /*  Calculate scores based on dog attributes and random factor */
+        const scores: Record<string, number> = {}; // Use Record to create key, value pairs
 
-        this.participants.forEach(dog => {
+        this.participants.forEach(dog => {  // Use dog => so dog represents the current element
+
             // Dogs lose energy based on difficulty
             dog.energy -= 10 * this.difficultyLevel;
 
             // Score calculation includes energy, happiness, and age factors
             const energyFactor = dog.energy / 100;
             const happinessFactor = dog.happiness / 100;
-            // Younger dogs perform slightly better in obstacle courses
+            // Younger dogs perform slightly better
             const ageFactor = 1 - (dog.age / 20); // Assumes dogs don't live past 20
 
-            // Add some randomness
+            // Every game has randomness
             const randomFactor = Math.random() * 0.3 + 0.85; // Between 0.85 and 1.15
 
             // Calculate final score
@@ -130,17 +150,20 @@ export class ObstacleCourse implements Competition<Dog> {
             dog.happiness += 10;
         });
 
-        // Find winner
+        /* Find winner */
         let winnerName = Object.keys(scores)[0];
+        // Retrieves the array of keys from scores and set winnerName to the first value in scores
         let highestScore = scores[winnerName];
 
         for (const [name, score] of Object.entries(scores)) {
+            // Iterates through the array of entries of score
             if (score > highestScore) {
                 highestScore = score;
                 winnerName = name;
             }
         }
 
+        // Get the top dog
         const winner = this.participants.find(dog => dog.name === winnerName)!;
 
         // Winner gets extra happiness
